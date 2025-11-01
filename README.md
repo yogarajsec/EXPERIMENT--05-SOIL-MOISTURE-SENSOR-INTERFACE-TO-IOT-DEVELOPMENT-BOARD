@@ -1,3 +1,7 @@
+**DATE:01.11.2025**
+**NAME:YOGARAJ.S**
+**REG.NO:212223040248**
+**DEPT:B.E(CSE)**
 # EXPERIMENT-05-SOIL-MOISTURE-SENSOR-INTERFACE-TO-IOT-DEVELOPMENT-BOARD
 
 ## Aim: 
@@ -107,13 +111,74 @@ GND is the ground pin.
 
 
 ## STM 32 CUBE PROGRAM :
+```
+#include "main.h"
+#include "stdio.h"
+
+#if defined(_GNUC_)
+
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif
+uint16_t readValue;
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+ADC_HandleTypeDef hadc;
+
+UART_HandleTypeDef huart2;
 
 
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_ADC_Init(void);
+static void MX_USART2_UART_Init(void);
+/* USER CODE BEGIN PFP */
 
+int main(void)
+{
+
+ 
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  
+  SystemClock_Config();
+
+    /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_ADC_Init();
+  MX_USART2_UART_Init();
+  
+    while (1)
+  {
+    	  HAL_ADC_Start(&hadc);
+	 	  	  	  HAL_ADC_PollForConversion(&hadc, HAL_MAX_DELAY);
+	 	  	  	  readValue = HAL_ADC_GetValue(&hadc);
+	 	  	  	  printf("Read value : %d\n", readValue);
+	 	  	  	  HAL_ADC_Stop(&hadc);
+	 	  	  	  uint32_t soilmoist = 100 - (readValue / 40.96);
+	 	  	  	  printf("Soil moisture : %ld %%\n", soilmoist);
+	 	  	  	  HAL_Delay(1000);
+
+     }
+ }
+PUTCHAR_PROTOTYPE
+{
+	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+
+	return ch;
+}
+
+```
 ## Output screen shots on serial monitor   :
- 
- 
- 
- 
+# Circuit:
+ ![WhatsApp Image 2025-11-01 at 09 45 13_63593182](https://github.com/user-attachments/assets/51da4ea8-19a3-4692-82a5-84fb05bcb46f) 
+ # serial monitor:
+ <img width="1022" height="893" alt="Screenshot 2025-11-01 094322" src="https://github.com/user-attachments/assets/4ff1e751-729b-4a61-ab31-945b78cd7d4d" />
+
 ## Result :
 Interfacing a Analog Input (soil moisture sensor) with ARM microcontroller based IOT development is executed and the results visualized on serial monitor 
